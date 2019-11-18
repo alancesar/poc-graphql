@@ -1,0 +1,36 @@
+type Query {
+    posts(onlyPublished: Boolean): [Post]!
+    authors: [Author]!
+}
+
+type Mutation {
+    addAuthor(data: UserInput!): Author!
+    updateAuthor(id: String!, data: UserInput!): Author!
+}
+
+input UserInput {
+    name: String
+    username: String
+    email: String
+}
+
+type Post {
+    id: ID!
+    author: Author!
+    title: String!
+    slug: String
+    body: String
+    description: String
+    categories: [String]
+    published: Boolean!
+    createdAt: String!
+    publishedAt: String
+}
+
+type Author {
+    id: ID!
+    name: String!
+    username: String!
+    email: String!
+    posts: [Post]!
+}
