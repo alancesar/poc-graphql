@@ -32,12 +32,6 @@ func AuthorHandler(service service.Author) func(w http.ResponseWriter, r *http.R
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
-
-		if err := json.NewEncoder(w).Encode(author); err != nil {
-			fmt.Printf(fmt.Sprintf("error encode author: %v", err))
-			w.WriteHeader(http.StatusInternalServerError)
-			return
-		}
 	}
 }
 
