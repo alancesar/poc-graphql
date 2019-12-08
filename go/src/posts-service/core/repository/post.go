@@ -46,7 +46,7 @@ func (repository cassandra) GetById(id string) domain.Post {
 	err := repository.session.Query(query, id).MapScan(m)
 
 	if err != nil {
-		fmt.Println("o my god")
+		fmt.Println(fmt.Sprintf("error getting post %s", id))
 		return domain.Post{}
 	}
 
