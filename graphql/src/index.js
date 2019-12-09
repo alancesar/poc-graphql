@@ -1,8 +1,10 @@
-import { ApolloServer } from 'apollo-server';
+import { ApolloServer, PubSub } from 'apollo-server';
 import { importSchema } from 'graphql-import';
 import resolvers from './resolvers/resolvers';
 import authorService from './service/author';
 import postService from './service/post';
+
+const pubsub = new PubSub()
 
 const server = new ApolloServer({
   typeDefs: importSchema('src/schema.graphql'),
@@ -10,6 +12,7 @@ const server = new ApolloServer({
   context: {
     authorService,
     postService,
+    pubsub,
   },
 });
 
