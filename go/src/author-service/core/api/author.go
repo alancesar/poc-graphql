@@ -35,20 +35,6 @@ func AuthorHandler(service service.Author) func(w http.ResponseWriter, r *http.R
 	}
 }
 
-func ListAuthorHandler(service service.Author) func(w http.ResponseWriter, r *http.Request) {
-	return func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Add("content-type", "application/json")
-
-		authors := service.GetAll()
-
-		if err := json.NewEncoder(w).Encode(authors); err != nil {
-			fmt.Printf(fmt.Sprintf("error encode author: %v", err))
-			w.WriteHeader(http.StatusInternalServerError)
-			return
-		}
-	}
-}
-
 func AddAuthorHandler(service service.Author) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("content-type", "application/json")

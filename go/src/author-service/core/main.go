@@ -2,26 +2,28 @@ package main
 
 import (
 	"author-service/core/api"
+	"author-service/core/infra"
 	"author-service/core/repository"
 	"author-service/core/service"
-	"github.com/gocql/gocql"
+	"fmt"
 	"github.com/gorilla/mux"
 	"net/http"
 )
 
 func main() {
 	r := mux.NewRouter()
+	connection, err := infra.NewPostgresConnection(
+		"localhost", "blog", "blog", "blog", 5432, false)
 
-	cluster := gocql.NewCluster("127.0.0.1")
-	cluster.Keyspace = "blog"
-	session, _ := cluster.CreateSession()
-	defer session.Close()
+	if err != nil {
+		fmt.Errorf("error on connecting database: %v", err)
+		panic(err)
+	}
 
-	repository := repository.NewAuthorRepository(session)
+	repository := repository.NewAuthorPostgresRepository(connection)
 	service := service.NewAuthorService(repository)
 
 	s := r.PathPrefix("/api/authors").Subrouter()
-	s.HandleFunc("", api.ListAuthorHandler(service)).Methods(http.MethodGet)
 	s.HandleFunc("", api.AddAuthorHandler(service)).Methods(http.MethodPost)
 	s.HandleFunc("/{id}", api.AuthorHandler(service)).Methods(http.MethodGet)
 	s.HandleFunc("/{id}", api.UpdateAuthorHandler(service)).Methods(http.MethodPut)

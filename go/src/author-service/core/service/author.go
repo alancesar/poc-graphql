@@ -9,20 +9,19 @@ import (
 
 type Author interface {
 	GetById(id string) (domain.Author, bool, error)
-	GetAll() []domain.Author
 	Add(author domain.Author) (domain.Author, error)
 	Update(id string, author domain.Author) (domain.Author, bool, error)
 }
 
 type service struct {
-	repository repository.Author
+	repository repository.AuthorRepository
 }
 
 var (
 	emptyAuthor = domain.Author{}
 )
 
-func NewAuthorService(repository repository.Author) Author {
+func NewAuthorService(repository repository.AuthorRepository) Author {
 	return service{repository: repository}
 }
 
@@ -34,10 +33,6 @@ func (service service) GetById(id string) (domain.Author, bool, error) {
 	}
 
 	return author, exists, err
-}
-
-func (service service) GetAll() []domain.Author {
-	return service.repository.GetAll()
 }
 
 func (service service) Add(author domain.Author) (domain.Author, error) {
